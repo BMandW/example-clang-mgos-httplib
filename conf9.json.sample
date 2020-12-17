@@ -1,0 +1,24 @@
+{
+  "device": {
+    "id": "esp32_994B50"
+  },
+  "aws": {
+    "thing_name": "esp32_994B50"
+  },
+  "bt": {
+    "enable": false
+  },
+  "provision": {
+    "max_state": 2
+  },
+  "wifi": {
+    "ap": {
+      "enable": false
+    },
+    "sta": {
+      "enable": true,
+      "ssid": "***",
+      "pass": "***"
+    }
+  }
+}
