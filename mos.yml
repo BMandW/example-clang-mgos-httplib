@@ -11,6 +11,7 @@ filesystem:
 config_schema:
   #- ['httplib.user_agent', 's', 'ESP32-Example', { title: 'user_agent' }]
   - ['api_url', 's', 'https://2553d4312a367fd080a05cae9db2d4bb.m.pipedream.net', { title: 'api_url' }]
+  - ['debug.level', 'i', 2, {}]
 
 libs:
   - origin: https://github.com/mongoose-os-libs/boards
@@ -20,6 +21,7 @@ libs:
   - origin: https://github.com/mongoose-os-libs/rpc-uart
   - origin: https://github.com/mongoose-os-libs/mjs
   - origin: https://github.com/BMandW/mgos-httplib
+  #- name: mgos-httplib
 
 tags:
   - c
