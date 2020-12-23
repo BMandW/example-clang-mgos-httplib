@@ -1,7 +1,1 @@
-# A blank Mongoose OS library
-
-
-## Overview
-
-This blank library is intended to be used as a skeleton for deleloping
-Mongoose OS libraries.
+# mgos-httplibの example C言語 実装
