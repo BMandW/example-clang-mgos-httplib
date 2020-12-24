@@ -32,6 +32,12 @@ static void timer_handler(void* arg) {
     // レスポンスボディ取得
     LOG(LL_INFO, ("Response Body=[%s]", res->body));
 
+    // JSON parse
+    bool* success = NULL;
+    if (json_scanf(res->body, strlen(res->body), "{success: %B}", &success) != 0) {
+        LOG(LL_INFO, ("JSON attr[\"success\"]=%s", success ? "TRUE" : "FALSE"));
+    };
+
     // レスポンス開放
     http_res_free(res);
 }
