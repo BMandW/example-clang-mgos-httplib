@@ -11,7 +11,7 @@ filesystem:
 config_schema:
   - ['httplib.user_agent', 's', 'ESP32-C-Example', { title: 'user_agent' }]
   - ['api_url', 's', 'https://2553d4312a367fd080a05cae9db2d4bb.m.pipedream.net', { title: 'api_url' }]
-  - ['debug.level', 'i', 2, {}]
+  - ['debug.level', 'i', 3, {}]
 
 libs:
   - origin: https://github.com/mongoose-os-libs/boards

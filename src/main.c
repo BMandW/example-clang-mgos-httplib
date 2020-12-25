@@ -23,20 +23,25 @@ static void timer_handler(void* arg) {
 
     LOG(LL_INFO, ("Response Status: %d", res->status));
 
-    // ヘッダ値取得
-    char buff[128];
-    http_res_header_value(res, "content-type", buff, sizeof(buff));
-    if (buff != NULL) {
-        LOG(LL_INFO, ("Response ContentType=[%s]", buff));
-    }
-    // レスポンスボディ取得
-    LOG(LL_INFO, ("Response Body=[%s]", res->body));
+    if (res->success) {
+        // ヘッダ値取得
+        char* hv = http_res_header_value(res, "content-type");
+        if (hv != NULL) {
+            LOG(LL_INFO, ("Response ContentType=[%s]", hv));
+        }
+        char* hv2 = http_res_header_value(res, "date");
+        if (hv2 != NULL) {
+            LOG(LL_INFO, ("Date=[%s]", hv));
+        }
+        // レスポンスボディ取得
+        LOG(LL_INFO, ("Response Body=[%s]", res->body));
 
-    // JSON parse
-    bool* success = NULL;
-    if (json_scanf(res->body, strlen(res->body), "{success: %B}", &success) != 0) {
-        LOG(LL_INFO, ("JSON attr[\"success\"]=%s", success ? "TRUE" : "FALSE"));
-    };
+        // JSON parse
+        bool* success = NULL;
+        if (json_scanf(res->body, strlen(res->body), "{success: %B}", &success) != 0) {
+            LOG(LL_INFO, ("JSON attr[\"success\"]=%s", success ? "TRUE" : "FALSE"));
+        };
+    }
 
     // レスポンス開放
     http_res_free(res);
