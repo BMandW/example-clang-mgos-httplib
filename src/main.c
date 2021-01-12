@@ -26,8 +26,12 @@ static void timer_handler(void* arg) {
     if (res->success) {
         // ヘッダ値取得
         char* hv = http_res_header_value(res, "content-type");
+        bool isJson = false;
         if (hv != NULL) {
             LOG(LL_INFO, ("Response ContentType=[%s]", hv));
+            if (strcmp(hv, "application/json")) {
+                isJson = true;
+            }
         }
         char* hv2 = http_res_header_value(res, "date");
         if (hv2 != NULL) {
@@ -37,14 +41,19 @@ static void timer_handler(void* arg) {
         LOG(LL_INFO, ("Response Body=[%s]", res->body));
 
         // JSON parse
-        bool* success = NULL;
-        if (json_scanf(res->body, strlen(res->body), "{success: %B}", &success) != 0) {
-            LOG(LL_INFO, ("JSON attr[\"success\"]=%s", success ? "TRUE" : "FALSE"));
-        };
+        if (isJson) {
+            bool* success = NULL;
+            if (json_scanf(res->body, strlen(res->body), "{success: %B}", &success) != 0) {
+                LOG(LL_INFO, ("JSON attr[\"success\"]=%s", success ? "TRUE" : "FALSE"));
+            };
+        }
+    } else {
+        LOG(LL_INFO, ("Request is not Success: %d", res->status));
     }
 
     // レスポンス開放
     http_res_free(res);
+    LOG(LL_INFO, ("@Finish"));
 }
 enum mgos_app_init_result mgos_app_init(void) {
     mgos_set_timer(30000, true, timer_handler, NULL);

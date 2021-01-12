@@ -19,9 +19,9 @@ libs:
   - origin: https://github.com/mongoose-os-libs/rpc-service-config
   - origin: https://github.com/mongoose-os-libs/rpc-service-fs
   - origin: https://github.com/mongoose-os-libs/rpc-uart
-  - name: mgos-httplib
-  #- origin: https://github.com/BMandW/mgos-httplib
-  #  version: 1.0.1
+  - origin: https://github.com/BMandW/mgos-httplib
+    version: 1.0.2
+  #- name: mgos-httplib
 
 tags:
   - c
