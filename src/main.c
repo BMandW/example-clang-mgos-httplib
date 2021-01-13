@@ -1,6 +1,10 @@
 #include <mgos.h>
+#include <mgos_bme280.h>
 
 #include "httplib.h"
+
+struct mgos_bme280* bme280;
+struct mgos_bme280_data* bme280data;
 
 static void timer_handler(void* arg) {
     // C実装
@@ -15,8 +19,14 @@ static void timer_handler(void* arg) {
     http_req_add_header(req, "X-Imprement", "C-lang");
 
     // リクエストボディ設定(JSON)
-    struct json_out out = JSON_OUT_BUF(req->raw_body, sizeof(req->raw_body));
-    json_printf(&out, "{%Q: [%d, %d]}", "values", 11, 12);
+    if (mgos_bme280_read(bme280, bme280data) == 0) {
+        LOG(LL_INFO, ("Temperature: %.1f, Humid: %.1f", bme280data->temp, bme280data->humid));
+        struct json_out out = JSON_OUT_BUF(req->raw_body, sizeof(req->raw_body));
+        json_printf(&out, "{%Q: [%.1f, %.1f]}", "values", bme280data->temp, bme280data->humid);
+    } else {
+        LOG(LL_INFO, ("Failt to read BME280 data"));
+        return;
+    };
 
     // リクエスト送信
     HTTPRes_t* res = http_send(req);
@@ -56,8 +66,9 @@ static void timer_handler(void* arg) {
     LOG(LL_INFO, ("@Finish"));
 }
 enum mgos_app_init_result mgos_app_init(void) {
+    bme280 = mgos_bme280_i2c_create(0x76);
+    bme280data = mgos_bme280_data_create();
     mgos_set_timer(30000, true, timer_handler, NULL);
-    // mgos_msleep((uint32_t)15000);
 
     return MGOS_APP_INIT_SUCCESS;
 }

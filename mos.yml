@@ -11,7 +11,10 @@ filesystem:
 config_schema:
   - ['httplib.user_agent', 's', 'ESP32-C-Example', { title: 'user_agent' }]
   - ['api_url', 's', 'https://2553d4312a367fd080a05cae9db2d4bb.m.pipedream.net', { title: 'api_url' }]
-  - ['debug.level', 'i', 3, {}]
+  - ['debug.level', 'i', 2, {}]
+  - ['i2c.enable', true]
+  - ['i2c.sda_gpio', 21]
+  - ['i2c.scl_gpio', 22]
 
 libs:
   - origin: https://github.com/mongoose-os-libs/boards
@@ -19,8 +22,9 @@ libs:
   - origin: https://github.com/mongoose-os-libs/rpc-service-config
   - origin: https://github.com/mongoose-os-libs/rpc-service-fs
   - origin: https://github.com/mongoose-os-libs/rpc-uart
+  - origin: https://github.com/mongoose-os-libs/bme280
   - origin: https://github.com/BMandW/mgos-httplib
-    version: 1.0.2
+    version: 1.0.3
   #- name: mgos-httplib
 
 tags:
