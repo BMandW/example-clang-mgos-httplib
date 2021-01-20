@@ -1,14 +1,31 @@
 #include <mgos.h>
 #include <mgos_bme280.h>
+#include <mgos_wifi.h>
+#include <stdbool.h>
 
 #include "httplib.h"
 
 struct mgos_bme280* bme280;
 struct mgos_bme280_data* bme280data;
+static bool connected;
 
+static void net_cb(int ev, void* evd, void* arg) {
+    switch (ev) {
+        case MGOS_NET_EV_DISCONNECTED:
+            connected = false;
+            break;
+        case MGOS_NET_EV_IP_ACQUIRED:
+            connected = true;
+            break;
+    }
+}
 static void timer_handler(void* arg) {
     // C実装
     LOG(LL_INFO, ("C.httlib Example/ Sys.uptime: %f", mgos_uptime()));
+    if (!connected) {
+        LOG(LL_INFO, ("Network connection is not available now."));
+        return;
+    }
 
     // configからリクエスト送信先api.urlを取得
     char* url = (char*)mgos_sys_config_get_api_url();
@@ -68,7 +85,9 @@ static void timer_handler(void* arg) {
 enum mgos_app_init_result mgos_app_init(void) {
     bme280 = mgos_bme280_i2c_create(0x76);
     bme280data = mgos_bme280_data_create();
-    mgos_set_timer(30000, true, timer_handler, NULL);
+
+    mgos_event_add_group_handler(MGOS_EVENT_GRP_NET, net_cb, NULL);
+    mgos_set_timer(30000, MGOS_TIMER_REPEAT | MGOS_TIMER_RUN_NOW, timer_handler, NULL);
 
     return MGOS_APP_INIT_SUCCESS;
 }
