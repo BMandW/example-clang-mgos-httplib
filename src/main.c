@@ -31,7 +31,7 @@ static void timer_handler(void* arg) {
     char* url = (char*)mgos_sys_config_get_api_url();
 
     // リクエスト作成
-    HTTPReq_t* req = http_create_req(url, HTTP_METHOD_POST, HTTP_CT_JSON);
+    HTTPReq_t* req = http_create_req(url, M_POST, HTTP_CT_JSON);
     // ヘッダ設定
     http_req_add_header(req, "X-Imprement", "C-lang");
 
